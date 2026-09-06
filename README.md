@@ -117,9 +117,6 @@ zsh 初期化スクリプトが組み込まれます。zsh の `initContent` に
 ため、利用するホスト側で `programs.zsh.enable = true` になっている必要が
 あります。
 
-`fzf` がセッション選択に必要です。ホスト側で `fzf` をインストールして
-ください。
-
 ### 単体でのビルド検証
 
 この flake は `homeConfigurations.default` を持ち、自身の homeModule を
