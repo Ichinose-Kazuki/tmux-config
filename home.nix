@@ -133,7 +133,10 @@ in
       '';
     };
 
-    home.packages = [ tmux-autocopy ];
+    home.packages = [
+      tmux-autocopy
+      pkgs.fzf
+    ];
 
     programs.zsh.initContent = lib.mkAfter ''
       # tmux 起動: tmux の外で対話シェルが起きたらセッションを選択/作成してアタッチ
