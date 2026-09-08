@@ -131,6 +131,14 @@ in
         bind -n MouseDragEnd1Pane run-shell '${tmux-autocopy}/bin/tmux-autocopy'
         bind -n MouseDragEnd1Border run-shell '${tmux-autocopy}/bin/tmux-autocopy'
       '';
+
+      plugins = [
+        pkgs.tmuxPlugins.resurrect
+        {
+          plugin = pkgs.tmuxPlugins.continuum;
+          extraConfig = "set -g @continuum-restore 'on'";
+        }
+      ];
     };
 
     home.packages = [
