@@ -45,11 +45,17 @@ in
 
         # 以下では tmux のウィンドウを terminal emulator のタブに見立ててタブと呼んでいる
 
-        # タブバー（ステータスバー）を上部にし、タブ名のみ表示
+        # タブバー（ステータスバー）を上部にし、タブ名のみ表示。
+        #
+        # 注意: status-left / status-right を空にする設定は「ここ」ではなく、
+        # 下側 continuum プラグインの extraConfig に置いている（理由はそちらの
+        # コメント参照）。home-manager は tmux.conf を プラグインの run-shell
+        # （中）→ この extraConfig（後）の順でマージするため、ここで
+        # status-right を空にすると continuum が run-shell 実行時に status-right
+        # へ埋め込んだ自動保存トリガー #(continuum_save.sh) を上書きで消去し、
+        # 15分ごとの自動保存が一切行われない（保存ファイルが作られない）。
         set -g status on
         set -g status-position top
-        set -g status-left ""
-        set -g status-right ""
         set -g status-style "bg=default"
         set -g status-justify left
         set -g window-status-format "  #{?#{==:${pane0Title},},#W,#{?#{==:${pane0Title},#{host}},#W,${pane0Title}}}  "
@@ -136,7 +142,19 @@ in
         pkgs.tmuxPlugins.resurrect
         {
           plugin = pkgs.tmuxPlugins.continuum;
-          extraConfig = "set -g @continuum-restore 'on'";
+          # continuum は run-shell 実行時に「その時点の status-right」に対して
+          # 自動保存トリガー #(continuum_save.sh) を prepend する（ステータスが
+          # 再描画されるたびに発火し、15分間隔で save.sh を実行）。
+          #
+          # そのため status-left / status-right を空にする設定は、必ずこの
+          # run-shell 「より前」に置く必要がある。home-manager は plugins の
+          # extraConfig（中）→ プラグインの run-shell（中）→ main extraConfig
+          # （後）の順でマージするため、main extraConfig（後）で空にすると
+          # 埋め込まれたトリガーが消去され保存ファイルが一切作られない。
+          # 既定の status-right（時刻など）を消すには、ここで空にしておき、
+          # その後に continuum がフックを prepend させればよい（フックは出力を
+          # 出さないため表示上は空のまま）。
+          extraConfig = "set -g @continuum-restore 'on'\nset -g status-right \"\"\nset -g status-left \"\"";
         }
       ];
     };
