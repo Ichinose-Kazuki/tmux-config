@@ -81,6 +81,9 @@ in
         bind -n M-\\ split-window -h -c "#{pane_current_path}"
         bind -n M-- split-window -v -c "#{pane_current_path}"
 
+        # pane の全画面表示(zoom)トグル
+        bind -n C-S-= resize-pane -Z
+
         # 画面間の移動
         bind -n M-h select-pane -L
         bind -n M-l select-pane -R
@@ -103,6 +106,9 @@ in
         bind -T copy-mode-vi q send-keys -X cancel
         bind -T copy-mode-vi Escape send-keys -X cancel
         bind -T copy-mode-vi Enter send-keys -X cancel
+        # 上の unbind-key -T copy-mode-vi -a より後に置くことで、
+        # zoom トグル(C-S-=)を copy-mode 中も有効にする。
+        bind -T copy-mode-vi C-S-= resize-pane -Z
 
         # copy-mode の表示色
         set -g mode-style "bg=magenta,fg=white"
