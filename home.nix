@@ -38,6 +38,7 @@ in
       terminal = "tmux-256color"; # pane 内のアプリケーションに $TERM として伝わる値
       keyMode = "vi";
       mouse = true;
+      escapeTime = 100;
       extraConfig = ''
         # ホワイトリスト方式のベース設定（すべて無効化）
         unbind-key -a
