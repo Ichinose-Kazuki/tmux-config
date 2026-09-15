@@ -124,12 +124,13 @@ in
         set -as terminal-features 'xterm*:extkeys'
         set -as terminal-features 'xterm*:csiu'
 
+        set -g extended-keys on
         # 内側のアプリケーションの要求の有無に関わらず、拡張キーボードプロトコルを送信する
         set -s extended-keys always
         # 内側へ送る形式を CSI-u にする。tmux のデフォルトは xterm 形式だが、
         # これだと kitty プロトコルの CSI-u シーケンスが xterm 形式に翻訳され、
         # zsh 側の CSI-u バインドに届かなくなる。
-        set -s extended-keys-format csi-u
+        set -g extended-keys-format csi-u
 
         # detach でセッションを死なさない
         set -g destroy-unattached off
