@@ -69,8 +69,12 @@ in
         bind -n End send-keys Escape "[F"
 
         # タブ操作
+        # 旧 CSI-u（xterm modifyOtherKeys）は Shift 付きの文字を Shift 適用後の
+        # 文字として送るため、大文字と小文字の両方を登録して端末差を吸収する。
         bind -n C-S-t new-window -a -c "#{pane_current_path}"
+        bind -n C-S-T new-window -a -c "#{pane_current_path}"
         bind -n C-S-w kill-window
+        bind -n C-S-W kill-window
         bind -n C-Tab next-window
         bind -n C-BTab previous-window
 
@@ -83,7 +87,9 @@ in
         bind -n M-- split-window -v -c "#{pane_current_path}"
 
         # pane の全画面表示(zoom)トグル
+        # Shift 付きの記号は Shift 適用後の文字（= は +）で届くため両方を登録する。
         bind -n C-S-= resize-pane -Z
+        bind -n C-S-+ resize-pane -Z
 
         # 画面間の移動
         bind -n M-h select-pane -L
@@ -110,6 +116,7 @@ in
         # 上の unbind-key -T copy-mode-vi -a より後に置くことで、
         # zoom トグル(C-S-=)を copy-mode 中も有効にする。
         bind -T copy-mode-vi C-S-= resize-pane -Z
+        bind -T copy-mode-vi C-S-+ resize-pane -Z
 
         # copy-mode の表示色
         set -g mode-style "bg=magenta,fg=white"
@@ -120,17 +127,15 @@ in
         set -g set-clipboard on
 
         # 外側の Terminal Emulator に対して True Color (24bitカラー) 対応を宣伝
-        set -as terminal-features ',xterm*:RGB'
+        set -as terminal-features 'xterm*:RGB'
         set -as terminal-features 'xterm*:extkeys'
-        set -as terminal-features 'xterm*:csiu'
 
-        set -g extended-keys on
         # 内側のアプリケーションの要求の有無に関わらず、拡張キーボードプロトコルを送信する
         set -s extended-keys always
         # 内側へ送る形式を CSI-u にする。tmux のデフォルトは xterm 形式だが、
         # これだと kitty プロトコルの CSI-u シーケンスが xterm 形式に翻訳され、
         # zsh 側の CSI-u バインドに届かなくなる。
-        set -g extended-keys-format csi-u
+        set -s extended-keys-format csi-u
 
         # detach でセッションを死なさない
         set -g destroy-unattached off
