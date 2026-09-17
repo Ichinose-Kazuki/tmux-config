@@ -147,7 +147,7 @@ in
         # root テーブルで発火し、ここで残った選択をコピーする。
         # マウスが pane 境界線上で離されたときは MouseDragEnd1Pane ではなく
         # MouseDragEnd1Border が発火するため、両方に同じスクリプトを仕込む。
-        bind -n MouseDragEnd1Pane run-shell '${tmux-autocopy}/bin/tmux-autocopy'
+        bind -n MouseDragEnd1Pane { send -M; run-shell '${tmux-autocopy}/bin/tmux-autocopy' }
         bind -n MouseDragEnd1Border run-shell '${tmux-autocopy}/bin/tmux-autocopy'
       '';
 
